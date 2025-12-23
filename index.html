@@ -3,90 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D 圣诞树 🎄</title>
+<title>3D 圣诞树测试</title>
 <style>
   body { margin:0; overflow:hidden; background:#001; }
-  canvas { display:block; }
 </style>
 </head>
 <body>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
 <script>
-  // ----- 初始化 -----
+  // ---- 初始化场景 ----
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.set(0,2,5);
+
   const renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  // ----- 光源 -----
+  // ---- 光源 ----
   const ambient = new THREE.AmbientLight(0xffffff,0.6);
   scene.add(ambient);
   const point = new THREE.PointLight(0xffffff,0.8);
   point.position.set(5,10,5);
   scene.add(point);
 
-  // ----- 树干 -----
+  // ---- 树干 ----
   const trunkGeom = new THREE.CylinderGeometry(0.2,0.2,1,16);
   const trunkMat = new THREE.MeshStandardMaterial({color:0x8B4513});
   const trunk = new THREE.Mesh(trunkGeom,trunkMat);
   trunk.position.y = 0.5;
   scene.add(trunk);
 
-  // ----- 树枝 -----
-  const branches = [];
+  // ---- 树枝 ----
+  const branchGeom = new THREE.ConeGeometry(1,1,32);
   const branchMat = new THREE.MeshStandardMaterial({color:0x0B610B});
-  for(let i=0;i<5;i++){
-    const geom = new THREE.ConeGeometry(1-i*0.15,1,32);
-    const mesh = new THREE.Mesh(geom, branchMat);
-    mesh.position.y = 1 + i*0.6;
-    scene.add(mesh);
-    branches.push(mesh);
-  }
+  const branch = new THREE.Mesh(branchGeom,branchMat);
+  branch.position.y = 1.2;
+  scene.add(branch);
 
-  // ----- 雪粒子 -----
-  const particleCount = 100;
-  const particles = new THREE.BufferGeometry();
-  const positions = new Float32Array(particleCount*3);
-  for(let i=0;i<particleCount;i++){
-    positions[i*3+0] = (Math.random()-0.5)*6;
-    positions[i*3+1] = Math.random()*5+2;
-    positions[i*3+2] = (Math.random()-0.5)*6;
-  }
-  particles.setAttribute('position', new THREE.BufferAttribute(positions,3));
-  const pMaterial = new THREE.PointsMaterial({color:0xffffff, size:0.05});
-  const particleSystem = new THREE.Points(particles,pMaterial);
-  scene.add(particleSystem);
-
-  // ----- 相机 -----
-  camera.position.set(0,2,5);
-  camera.lookAt(0,1,0);
-
-  // ----- 动画 -----
+  // ---- 渲染循环 ----
   function animate(){
     requestAnimationFrame(animate);
-
-    // 树枝轻微旋转
-    branches.forEach((b,i)=>b.rotation.y += 0.002*(i+1));
-
-    // 雪下落
-    const pos = particleSystem.geometry.attributes.position.array;
-    for(let i=0;i<particleCount;i++){
-      pos[i*3+1] -= 0.02;
-      if(pos[i*3+1]<0) pos[i*3+1] = Math.random()*5+2;
-    }
-    particleSystem.geometry.attributes.position.needsUpdate = true;
-
+    branch.rotation.y += 0.01;
     renderer.render(scene,camera);
   }
   animate();
 
-  // ----- 响应式 -----
+  // ---- 自适应 ----
   window.addEventListener('resize',()=>{
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth,window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
   });
 </script>
 
