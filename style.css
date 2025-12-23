@@ -1,0 +1,91 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(#0b1d26, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont;
+}
+
+.tree {
+  position: relative;
+  width: 220px;
+  height: 360px;
+  z-index: 2;
+}
+
+.layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 110px solid transparent;
+  border-right: 110px solid transparent;
+}
+
+.layer1 {
+  top: 60px;
+  border-bottom: 90px solid #1c8c4c;
+}
+
+.layer2 {
+  top: 110px;
+  border-bottom: 110px solid #1fa75f;
+}
+
+.layer3 {
+  top: 170px;
+  border-bottom: 130px solid #27c76f;
+}
+
+.trunk {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 60px;
+  background: #6b4f2a;
+  border-radius: 4px;
+}
+
+.star {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;
+}
+
+.light {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: blink 1.5s infinite;
+}
+
+.light:nth-child(6) { top: 140px; left: 80px; background: red; }
+.light:nth-child(7) { top: 160px; left: 120px; background: yellow; }
+.light:nth-child(8) { top: 200px; left: 60px; background: deepskyblue; }
+.light:nth-child(9) { top: 220px; left: 140px; background: pink; }
+.light:nth-child(10){ top: 260px; left: 90px; background: orange; }
+.light:nth-child(11){ top: 280px; left: 120px; background: violet; }
+
+@keyframes blink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.hint {
+  position: fixed;
+  bottom: 20px;
+  color: #fff;
+  opacity: 0.7;
+  font-size: 14px;
+}
